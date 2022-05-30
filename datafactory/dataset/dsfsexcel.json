@@ -12,11 +12,38 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Planilha1",
 			"location": {
 				"type": "FileServerLocation",
 				"fileName": "Base 2017.xlsx"
-			}
+			},
+			"firstRowAsHeader": true
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "ID_MARCA",
+				"type": "String"
+			},
+			{
+				"name": "MARCA",
+				"type": "String"
+			},
+			{
+				"name": "ID_LINHA",
+				"type": "String"
+			},
+			{
+				"name": "LINHA",
+				"type": "String"
+			},
+			{
+				"name": "DATA_VENDA",
+				"type": "String"
+			},
+			{
+				"name": "QTD_VENDA",
+				"type": "String"
+			}
+		]
 	}
 }
