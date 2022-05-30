@@ -13,7 +13,8 @@
 		"type": "Excel",
 		"typeProperties": {
 			"location": {
-				"type": "FileServerLocation"
+				"type": "FileServerLocation",
+				"fileName": "Base 2017.xlsx"
 			}
 		},
 		"schema": []
