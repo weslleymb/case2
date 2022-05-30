@@ -32,8 +32,13 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Planilha1",
 			"location": {
 				"type": "FileServerLocation",
+				"fileName": {
+					"value": "@dataset().dsfsexcel_arquivo_on_prem",
+					"type": "Expression"
+				},
 				"folderPath": {
 					"value": "@dataset().dsfsexcel_diretorio_on_prem",
 					"type": "Expression"
