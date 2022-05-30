@@ -26,7 +26,7 @@
 			}
 		},
 		"connectVia": {
-			"referenceName": "AutoResolveIntegrationRuntime",
+			"referenceName": "ircase2",
 			"type": "IntegrationRuntimeReference"
 		}
 	}
