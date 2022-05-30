@@ -43,7 +43,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "Iteracao arquivos",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -111,7 +111,7 @@
 										"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
 										"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com",
 										"dsfsexcel_arquivo_on_prem": {
-											"value": "@item().itemName",
+											"value": "@item().name",
 											"type": "Expression"
 										}
 									}
