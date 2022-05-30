@@ -1,12 +1,6 @@
 {
 	"name": "lsdls",
 	"properties": {
-		"parameters": {
-			"data_lake_container": {
-				"type": "string",
-				"defaultValue": "raw"
-			}
-		},
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
