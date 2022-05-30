@@ -121,7 +121,14 @@
 							"outputs": [
 								{
 									"referenceName": "dsdls",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"dsdls_container": "raw",
+										"dsdls_arquivo": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
