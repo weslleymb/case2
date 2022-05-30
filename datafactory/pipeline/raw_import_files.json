@@ -19,7 +19,18 @@
 						"referenceName": "dsfsexcel",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem"
+							"dsfsexcel_diretorio_on_prem": {
+								"value": "@variables('pipeline_diretorio_on_prem')",
+								"type": "Expression"
+							},
+							"dsfsexcel_usuario_on_prem": {
+								"value": "@variables('pipeline_usuario_on_prem')",
+								"type": "Expression"
+							},
+							"dsfsexcel_arquivo_on_prem": {
+								"value": "@variables('pipeline_arquivo_on_prem')",
+								"type": "Expression"
+							}
 						}
 					},
 					"fieldList": [
@@ -98,7 +109,8 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
-										"dsfsexcel_usuario_on_prem": {
+										"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com",
+										"dsfsexcel_arquivo_on_prem": {
 											"value": "@item().itemName",
 											"type": "Expression"
 										}
@@ -124,6 +136,9 @@
 			"pipeline_diretorio_on_prem": {
 				"type": "String",
 				"defaultValue": "C:\\\\work\\\\grupo_boticario\\\\origem"
+			},
+			"pipeline_arquivo_on_prem": {
+				"type": "String"
 			}
 		},
 		"folder": {
