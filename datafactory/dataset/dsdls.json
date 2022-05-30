@@ -22,7 +22,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@replace(dataset().dsdls_arquivo, ' ', '_')",
+					"value": "@concat(replace(dataset().dsdls_arquivo, ' ', '_'), '.txt')",
 					"type": "Expression"
 				},
 				"fileSystem": {
