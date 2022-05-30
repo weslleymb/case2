@@ -20,6 +20,7 @@
 						"storeSettings": {
 							"type": "FileServerReadSettings",
 							"recursive": false,
+							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						}
 					},
@@ -30,7 +31,8 @@
 							"dsfsexcel_diretorio_on_prem": "C:\\work\\grupo_boticario\\origem",
 							"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com"
 						}
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
@@ -47,7 +49,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Listar arquivos').output.value",
+						"value": "@activity('Listar arquivos').output",
 						"type": "Expression"
 					},
 					"activities": [
@@ -70,7 +72,7 @@
 										"type": "FileServerReadSettings",
 										"recursive": false,
 										"wildcardFileName": {
-											"value": "@item().filename",
+											"value": "@item()",
 											"type": "Expression"
 										},
 										"enablePartitionDiscovery": false
