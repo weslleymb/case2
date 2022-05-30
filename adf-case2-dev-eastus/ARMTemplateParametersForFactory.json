@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-case2-dev-eastus"
+		},
+		"lsdls_accountKey": {
+			"value": ""
+		},
+		"lsdls_properties_typeProperties_url": {
+			"value": "https://dlscase2deveastus.dfs.core.windows.net"
+		},
+		"lsfsexcel_properties_typeProperties_host": {
+			"value": "@{linkedService().on_prem_dir}"
+		},
+		"lsfsexcel_properties_typeProperties_userId": {
+			"value": "@{linkedService().on_prem_user}"
+		},
+		"lskeyvault_properties_typeProperties_baseUrl": {
+			"value": "https://kv-case2-dev-eastus.vault.azure.net/"
+		}
+	}
+}
