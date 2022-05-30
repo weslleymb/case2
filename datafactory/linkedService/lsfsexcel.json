@@ -3,10 +3,12 @@
 	"properties": {
 		"parameters": {
 			"lsfsexcel_usuario_on_prem": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "w.de.moura.barbosa@avanade.com"
 			},
 			"lsfsexcel_diretorio_on_prem": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "C:\\\\work\\\\grupo_boticario"
 			}
 		},
 		"annotations": [],
