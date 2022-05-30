@@ -3,7 +3,11 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "lsfsexcel",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"on_prem_user": "w.de.moura.barbosa@avanade.com",
+				"on_prem_dir": "C:\\\\work\\\\grupo_boticario"
+			}
 		},
 		"annotations": [],
 		"type": "Excel",
