@@ -21,6 +21,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@replace(dataset().dsdls_arquivo, ' ', '_')",
+					"type": "Expression"
+				},
 				"fileSystem": "data_lake_container"
 			},
 			"columnDelimiter": ",",
