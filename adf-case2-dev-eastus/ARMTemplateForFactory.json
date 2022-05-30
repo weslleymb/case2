@@ -39,139 +39,8 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "FileServerReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "ID_MARCA",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "ID_MARCA",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "MARCA",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "MARCA",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "ID_LINHA",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "ID_LINHA",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "LINHA",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "LINHA",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "DATA_VENDA",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "DATA_VENDA",
-											"type": "String",
-											"physicalType": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "QTD_VENDA",
-											"type": "String",
-											"physicalType": "String"
-										},
-										"sink": {
-											"name": "QTD_VENDA",
-											"type": "String",
-											"physicalType": "String"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "dsfsexcel",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dsdls",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
 						"name": "Listar arquivos",
-						"type": "Lookup",
+						"type": "GetMetadata",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
@@ -182,19 +51,118 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "FileServerReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
 							"dataset": {
 								"referenceName": "dsfsexcel",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"dsfsexcel_diretorio_on_prem": {
+										"value": "@variables('pipeline_diretorio_on_prem')",
+										"type": "Expression"
+									},
+									"dsfsexcel_usuario_on_prem": {
+										"value": "@variables('pipeline_usuario_on_prem')",
+										"type": "Expression"
+									},
+									"dsfsexcel_arquivo_on_prem": {
+										"value": "@variables('pipeline_arquivo_on_prem')",
+										"type": "Expression"
+									}
+								}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "FileServerReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
 							}
+						}
+					},
+					{
+						"name": "Iteracao arquivos",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Listar arquivos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Listar arquivos').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Carregar arquivo",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ExcelSource",
+											"storeSettings": {
+												"type": "FileServerReadSettings",
+												"recursive": true,
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "dsfsexcel",
+											"type": "DatasetReference",
+											"parameters": {
+												"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
+												"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com",
+												"dsfsexcel_arquivo_on_prem": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "dsdls",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
 						}
 					}
 				],
@@ -203,17 +171,16 @@
 					"cancelAfter": {}
 				},
 				"variables": {
-					"user_on_prem": {
+					"pipeline_usuario_on_prem": {
 						"type": "String",
 						"defaultValue": "w.de.moura.barbosa@avanade.com"
 					},
-					"source_on_prem": {
+					"pipeline_diretorio_on_prem": {
 						"type": "String",
-						"defaultValue": "C:\\work\\grupo_boticario"
+						"defaultValue": "C:\\\\work\\\\grupo_boticario\\\\origem"
 					},
-					"source_process_on_prem": {
-						"type": "String",
-						"defaultValue": "C:\\work\\grupo_boticario\\processados"
+					"pipeline_arquivo_on_prem": {
+						"type": "String"
 					}
 				},
 				"folder": {
@@ -275,11 +242,15 @@
 				"parameters": {
 					"dsfsexcel_diretorio_on_prem": {
 						"type": "string",
-						"defaultValue": "C:\\\\work\\\\grupo_boticario\\\\origem"
+						"defaultValue": "teste"
 					},
 					"dsfsexcel_usuario_on_prem": {
 						"type": "string",
-						"defaultValue": "w.de.moura.barbosa@avanade.com"
+						"defaultValue": "teste"
+					},
+					"dsfsexcel_arquivo_on_prem": {
+						"type": "string",
+						"defaultValue": "teste"
 					}
 				},
 				"annotations": [],
@@ -288,7 +259,10 @@
 					"sheetName": "Planilha1",
 					"location": {
 						"type": "FileServerLocation",
-						"fileName": "Base 2017.xlsx",
+						"fileName": {
+							"value": "@dataset().dsfsexcel_arquivo_on_prem",
+							"type": "Expression"
+						},
 						"folderPath": {
 							"value": "@dataset().dsfsexcel_diretorio_on_prem",
 							"type": "Expression"
