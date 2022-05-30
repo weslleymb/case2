@@ -20,7 +20,6 @@
 						"storeSettings": {
 							"type": "FileServerReadSettings",
 							"recursive": false,
-							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						}
 					},
@@ -28,14 +27,14 @@
 						"referenceName": "dsfsexcel",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
+							"dsfsexcel_diretorio_on_prem": "C:\\work\\grupo_boticario\\origem",
 							"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com"
 						}
 					}
 				}
 			},
 			{
-				"name": "Iteracao arquivos",
+				"name": "ForEach1",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -53,7 +52,7 @@
 					},
 					"activities": [
 						{
-							"name": "Carga arquivos",
+							"name": "Copy data1",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -69,9 +68,9 @@
 									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "FileServerReadSettings",
-										"recursive": true,
+										"recursive": false,
 										"wildcardFileName": {
-											"value": "@item()",
+											"value": "@item().filename",
 											"type": "Expression"
 										},
 										"enablePartitionDiscovery": false
