@@ -1,0 +1,33 @@
+{
+	"name": "lsfsexcel",
+	"properties": {
+		"parameters": {
+			"on_prem_user": {
+				"type": "string",
+				"defaultValue": "w.de.moura.barbosa@avanade.com"
+			},
+			"on_prem_dir": {
+				"type": "string",
+				"defaultValue": "C:\\\\work\\\\grupo_boticario"
+			}
+		},
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "@{linkedService().on_prem_dir}",
+			"userId": "@{linkedService().on_prem_user}",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "lskeyvault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "pass-user-on-prem"
+			}
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
