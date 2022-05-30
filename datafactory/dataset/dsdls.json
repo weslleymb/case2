@@ -3,14 +3,17 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "lsdls",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"data_lake_container": "raw"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "raw"
+				"fileSystem": "data_lake_container"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
