@@ -125,7 +125,7 @@
 									"parameters": {
 										"dsdls_container": "raw",
 										"dsdls_arquivo": {
-											"value": "@item().name",
+											"value": "@concat(replace(item().name, ' ', '_'), '.txt')",
 											"type": "Expression"
 										}
 									}

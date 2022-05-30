@@ -3,10 +3,7 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "lsdls",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"data_lake_container": "raw"
-			}
+			"type": "LinkedServiceReference"
 		},
 		"parameters": {
 			"dsdls_container": {
@@ -22,7 +19,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat(replace(dataset().dsdls_arquivo, ' ', '_'), '.txt')",
+					"value": "@dataset().dsdls_arquivo",
 					"type": "Expression"
 				},
 				"fileSystem": {
