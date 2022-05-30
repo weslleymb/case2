@@ -1,21 +1,11 @@
 {
 	"name": "lsfsexcel",
 	"properties": {
-		"parameters": {
-			"lsfsexcel_usuario_on_prem": {
-				"type": "string",
-				"defaultValue": "w.de.moura.barbosa@avanade.com"
-			},
-			"lsfsexcel_diretorio_on_prem": {
-				"type": "string",
-				"defaultValue": "C:\\\\work\\\\grupo_boticario"
-			}
-		},
 		"annotations": [],
 		"type": "FileServer",
 		"typeProperties": {
-			"host": "@{linkedService().lsfsexcel_diretorio_on_prem}",
-			"userId": "@{linkedService().lsfsexcel_usuario_on_prem}",
+			"host": "C:\\\\work\\\\grupo_boticario",
+			"userId": "w.de.moura.barbosa@avanade.com",
 			"password": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
