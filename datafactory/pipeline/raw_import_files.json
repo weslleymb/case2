@@ -1,0 +1,80 @@
+{
+	"name": "raw_import_files",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "dsfsexcel",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dsdls",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"variables": {
+			"user_on_prem": {
+				"type": "String",
+				"defaultValue": "w.de.moura.barbosa@avanade.com"
+			},
+			"source_on_prem": {
+				"type": "String",
+				"defaultValue": "C:\\work\\grupo_boticario"
+			},
+			"source_process_on_prem": {
+				"type": "String",
+				"defaultValue": "C:\\work\\grupo_boticario\\processados"
+			}
+		},
+		"folder": {
+			"name": "raw"
+		},
+		"annotations": []
+	}
+}

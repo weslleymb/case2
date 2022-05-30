@@ -1,0 +1,17 @@
+{
+	"name": "dsfsexcel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lsfsexcel",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation"
+			}
+		},
+		"schema": []
+	}
+}
