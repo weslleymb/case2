@@ -158,7 +158,13 @@
 										{
 											"referenceName": "dsdls",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"dsdls_container": "raw",
+												"dsdls_arquivo": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
 										}
 									]
 								}
@@ -200,14 +206,29 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "lsdls",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"data_lake_container": "raw"
+					}
+				},
+				"parameters": {
+					"dsdls_container": {
+						"type": "string"
+					},
+					"dsdls_arquivo": {
+						"type": "string"
+					}
 				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileSystem": "raw"
+						"fileName": {
+							"value": "@replace(dataset().dsdls_arquivo, ' ', '_')",
+							"type": "Expression"
+						},
+						"fileSystem": "data_lake_container"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
