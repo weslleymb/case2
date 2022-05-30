@@ -3,135 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "ExcelSource",
-						"storeSettings": {
-							"type": "FileServerReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						}
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "ID_MARCA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "ID_MARCA",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "MARCA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "MARCA",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ID_LINHA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "ID_LINHA",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "LINHA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "LINHA",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "DATA_VENDA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "DATA_VENDA",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "QTD_VENDA",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "QTD_VENDA",
-									"type": "String",
-									"physicalType": "String"
-								}
-							}
-						],
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "dsfsexcel",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "dsdls",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
 				"name": "Listar arquivos",
 				"type": "Lookup",
 				"dependsOn": [],
@@ -148,29 +19,114 @@
 						"type": "ExcelSource",
 						"storeSettings": {
 							"type": "FileServerReadSettings",
-							"recursive": true,
+							"recursive": false,
+							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						}
 					},
 					"dataset": {
 						"referenceName": "dsfsexcel",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
+							"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com"
+						}
 					}
+				}
+			},
+			{
+				"name": "Iteracao arquivos",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Listar arquivos",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Listar arquivos').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Carga arquivos",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"wildcardFileName": {
+											"value": "@item()",
+											"type": "Expression"
+										},
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "dsfsexcel",
+									"type": "DatasetReference",
+									"parameters": {
+										"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
+										"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "dsdls",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
 				}
 			}
 		],
 		"variables": {
-			"user_on_prem": {
+			"pipeline_usuario_on_prem": {
 				"type": "String",
 				"defaultValue": "w.de.moura.barbosa@avanade.com"
 			},
-			"source_on_prem": {
+			"pipeline_diretorio_on_prem": {
 				"type": "String",
-				"defaultValue": "C:\\work\\grupo_boticario"
-			},
-			"source_process_on_prem": {
-				"type": "String",
-				"defaultValue": "C:\\work\\grupo_boticario\\processados"
+				"defaultValue": "C:\\\\work\\\\grupo_boticario\\\\origem"
 			}
 		},
 		"folder": {
