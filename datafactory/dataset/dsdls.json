@@ -25,7 +25,10 @@
 					"value": "@replace(dataset().dsdls_arquivo, ' ', '_')",
 					"type": "Expression"
 				},
-				"fileSystem": "data_lake_container"
+				"fileSystem": {
+					"value": "@dataset().dsdls_container",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
