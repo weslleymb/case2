@@ -3,27 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Set variable1",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Get Metadata1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "pipeline_nome_arquivo_on_prem",
-					"value": {
-						"value": "@activity('Get Metadata1').output.itemName",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Get Metadata1",
+				"name": "Listar arquivos",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -44,12 +24,93 @@
 						}
 					},
 					"fieldList": [
-						"itemName"
+						"childItems"
 					],
 					"storeSettings": {
 						"type": "FileServerReadSettings",
 						"enablePartitionDiscovery": false
 					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Listar arquivos",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Listar arquivos').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Carregar arquivo",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "dsfsexcel",
+									"type": "DatasetReference",
+									"parameters": {
+										"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
+										"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "dsdls",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
 				}
 			}
 		],
@@ -61,10 +122,6 @@
 			"pipeline_diretorio_on_prem": {
 				"type": "String",
 				"defaultValue": "C:\\\\work\\\\grupo_boticario\\\\origem"
-			},
-			"pipeline_nome_arquivo_on_prem": {
-				"type": "String",
-				"defaultValue": "nome do arquivo"
 			}
 		},
 		"folder": {
