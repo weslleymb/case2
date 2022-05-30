@@ -18,14 +18,15 @@
 		"parameters": {
 			"dsfsexcel_diretorio_on_prem": {
 				"type": "string",
-				"defaultValue": "C:\\\\work\\\\grupo_boticario\\\\origem"
+				"defaultValue": "teste"
 			},
 			"dsfsexcel_usuario_on_prem": {
 				"type": "string",
-				"defaultValue": "w.de.moura.barbosa@avanade.com"
+				"defaultValue": "teste"
 			},
 			"dsfsexcel_arquivo_on_prem": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "teste"
 			}
 		},
 		"annotations": [],
