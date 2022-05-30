@@ -23,6 +23,9 @@
 			"dsfsexcel_usuario_on_prem": {
 				"type": "string",
 				"defaultValue": "w.de.moura.barbosa@avanade.com"
+			},
+			"dsfsexcel_arquivo_on_prem": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -31,7 +34,10 @@
 			"sheetName": "Planilha1",
 			"location": {
 				"type": "FileServerLocation",
-				"fileName": "Base 2017.xlsx",
+				"fileName": {
+					"value": "@dataset().dsfsexcel_arquivo_on_prem",
+					"type": "Expression"
+				},
 				"folderPath": {
 					"value": "@dataset().dsfsexcel_diretorio_on_prem",
 					"type": "Expression"
