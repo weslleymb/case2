@@ -21,6 +21,10 @@
 				"defaultValue": "C:\\\\work\\\\grupo_boticario\\\\origem"
 			},
 			"dsfsexcel_usuario_on_prem": {
+				"type": "string",
+				"defaultValue": "w.de.moura.barbosa@avanade.com"
+			},
+			"dsfsexcel_arquivo_on_prem": {
 				"type": "string"
 			}
 		},
