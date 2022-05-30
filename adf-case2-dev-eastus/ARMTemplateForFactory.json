@@ -17,11 +17,11 @@
 		},
 		"lsfsexcel_properties_typeProperties_host": {
 			"type": "string",
-			"defaultValue": "@{linkedService().on_prem_dir}"
+			"defaultValue": "@{linkedService().lsfsexcel_diretorio_on_prem}"
 		},
 		"lsfsexcel_properties_typeProperties_userId": {
 			"type": "string",
-			"defaultValue": "@{linkedService().on_prem_user}"
+			"defaultValue": "@{linkedService().lsfsexcel_usuario_on_prem}"
 		},
 		"lskeyvault_properties_typeProperties_baseUrl": {
 			"type": "string",
@@ -168,6 +168,34 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Listar arquivos",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"dataset": {
+								"referenceName": "dsfsexcel",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -234,8 +262,24 @@
 					"referenceName": "lsfsexcel",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"on_prem_user": "w.de.moura.barbosa@avanade.com",
-						"on_prem_dir": "C:\\\\work\\\\grupo_boticario"
+						"lsfsexcel_diretorio_on_prem": {
+							"value": "@dataset().dsfsexcel_diretorio_on_prem",
+							"type": "Expression"
+						},
+						"lsfsexcel_usuario_on_prem": {
+							"value": "@dataset().dsfsexcel_usuario_on_prem",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"dsfsexcel_diretorio_on_prem": {
+						"type": "string",
+						"defaultValue": "C:\\\\work\\\\grupo_boticario\\\\origem"
+					},
+					"dsfsexcel_usuario_on_prem": {
+						"type": "string",
+						"defaultValue": "w.de.moura.barbosa@avanade.com"
 					}
 				},
 				"annotations": [],
@@ -244,36 +288,15 @@
 					"sheetName": "Planilha1",
 					"location": {
 						"type": "FileServerLocation",
-						"fileName": "Base 2017.xlsx"
+						"fileName": "Base 2017.xlsx",
+						"folderPath": {
+							"value": "@dataset().dsfsexcel_diretorio_on_prem",
+							"type": "Expression"
+						}
 					},
 					"firstRowAsHeader": true
 				},
-				"schema": [
-					{
-						"name": "ID_MARCA",
-						"type": "String"
-					},
-					{
-						"name": "MARCA",
-						"type": "String"
-					},
-					{
-						"name": "ID_LINHA",
-						"type": "String"
-					},
-					{
-						"name": "LINHA",
-						"type": "String"
-					},
-					{
-						"name": "DATA_VENDA",
-						"type": "String"
-					},
-					{
-						"name": "QTD_VENDA",
-						"type": "String"
-					}
-				]
+				"schema": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/lsfsexcel')]"
@@ -314,13 +337,11 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"parameters": {
-					"on_prem_user": {
-						"type": "string",
-						"defaultValue": "w.de.moura.barbosa@avanade.com"
+					"lsfsexcel_diretorio_on_prem": {
+						"type": "string"
 					},
-					"on_prem_dir": {
-						"type": "string",
-						"defaultValue": "C:\\\\work\\\\grupo_boticario"
+					"lsfsexcel_usuario_on_prem": {
+						"type": "string"
 					}
 				},
 				"annotations": [],

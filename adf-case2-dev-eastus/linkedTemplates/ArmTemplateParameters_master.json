@@ -12,10 +12,10 @@
 			"value": "https://dlscase2deveastus.dfs.core.windows.net"
 		},
 		"lsfsexcel_properties_typeProperties_host": {
-			"value": "@{linkedService().on_prem_dir}"
+			"value": "@{linkedService().lsfsexcel_diretorio_on_prem}"
 		},
 		"lsfsexcel_properties_typeProperties_userId": {
-			"value": "@{linkedService().on_prem_user}"
+			"value": "@{linkedService().lsfsexcel_usuario_on_prem}"
 		},
 		"lskeyvault_properties_typeProperties_baseUrl": {
 			"value": "https://kv-case2-dev-eastus.vault.azure.net/"
