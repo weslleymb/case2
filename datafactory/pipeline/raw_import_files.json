@@ -19,8 +19,7 @@
 						"referenceName": "dsfsexcel",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
-							"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com"
+							"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem"
 						}
 					},
 					"fieldList": [
@@ -99,7 +98,10 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"dsfsexcel_diretorio_on_prem": "C:\\\\work\\\\grupo_boticario\\\\origem",
-										"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com"
+										"dsfsexcel_usuario_on_prem": {
+											"value": "@item().itemName",
+											"type": "Expression"
+										}
 									}
 								}
 							],
