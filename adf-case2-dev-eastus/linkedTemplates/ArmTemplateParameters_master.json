@@ -5,9 +5,6 @@
 		"factoryName": {
 			"value": "adf-case2-dev-eastus"
 		},
-		"lsdls_accountKey": {
-			"value": ""
-		},
 		"lsdls_properties_typeProperties_url": {
 			"value": "https://dlscase2deveastus.dfs.core.windows.net"
 		},

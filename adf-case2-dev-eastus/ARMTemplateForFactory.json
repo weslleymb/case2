@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-case2-dev-eastus"
 		},
-		"lsdls_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'lsdls'"
-		},
 		"lsdls_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://dlscase2deveastus.dfs.core.windows.net"
@@ -228,7 +224,10 @@
 							"value": "@replace(dataset().dsdls_arquivo, ' ', '_')",
 							"type": "Expression"
 						},
-						"fileSystem": "data_lake_container"
+						"fileSystem": {
+							"value": "@dataset().dsdls_container",
+							"type": "Expression"
+						}
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -302,19 +301,17 @@
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"parameters": {
-					"data_lake_container": {
-						"type": "string",
-						"defaultValue": "raw"
-					}
-				},
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
 					"url": "[parameters('lsdls_properties_typeProperties_url')]",
 					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('lsdls_accountKey')]"
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "lskeyvault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "storageaccount-key"
 					}
 				},
 				"connectVia": {
@@ -323,7 +320,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/lskeyvault')]"
 			]
 		},
 		{
