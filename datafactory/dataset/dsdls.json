@@ -8,6 +8,14 @@
 				"data_lake_container": "raw"
 			}
 		},
+		"parameters": {
+			"dsdls_container": {
+				"type": "string"
+			},
+			"dsdls_arquivo": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
