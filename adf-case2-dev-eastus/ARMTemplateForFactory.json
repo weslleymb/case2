@@ -157,7 +157,7 @@
 											"parameters": {
 												"dsdls_container": "raw",
 												"dsdls_arquivo": {
-													"value": "@item().name",
+													"value": "@concat(replace(item().name, ' ', '_'), '.txt')",
 													"type": "Expression"
 												}
 											}
@@ -202,10 +202,7 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "lsdls",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"data_lake_container": "raw"
-					}
+					"type": "LinkedServiceReference"
 				},
 				"parameters": {
 					"dsdls_container": {
@@ -221,7 +218,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": {
-							"value": "@replace(dataset().dsdls_arquivo, ' ', '_')",
+							"value": "@dataset().dsdls_arquivo",
 							"type": "Expression"
 						},
 						"fileSystem": {
