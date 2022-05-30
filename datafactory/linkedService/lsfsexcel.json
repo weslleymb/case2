@@ -2,18 +2,18 @@
 	"name": "lsfsexcel",
 	"properties": {
 		"parameters": {
-			"on_prem_user": {
+			"lsfsexcel_usuario_on_prem": {
 				"type": "string"
 			},
-			"on_prem_dir": {
+			"lsfsexcel_diretorio_on_prem": {
 				"type": "string"
 			}
 		},
 		"annotations": [],
 		"type": "FileServer",
 		"typeProperties": {
-			"host": "@{linkedService().on_prem_dir}",
-			"userId": "@{linkedService().on_prem_user}",
+			"host": "@{linkedService().lsfsexcel_diretorio_on_prem}",
+			"userId": "@{linkedService().lsfsexcel_usuario_on_prem}",
 			"password": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
