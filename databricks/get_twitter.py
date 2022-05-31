@@ -27,6 +27,8 @@ access_token_secret = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter
 
 bronze_tweets = "dbfs:/mnt/bronze/tweets"
 
+bronze_base_vendas = "dbfs:/mnt/bronze/base_vendas"
+
 # COMMAND ----------
 
 # DBTITLE 1,Importacao bibliotecas
@@ -72,18 +74,36 @@ df_tweets = spark.createDataFrame(pd_tweets)
 
 # COMMAND ----------
 
-# DBTITLE 1,Armazenamento
+# DBTITLE 1,Armazenamento tweets
 if arquivo_existe(raw_path_recurso):
-  df_tweets\
-    .write\
-    .format("delta")\
-    .mode("overwrite")\
-    .option("overwriteSchema", "true")\
-    .save(bronze_tweets)
-else:
   df_tweets\
     .write\
     .format("delta")\
     .mode("append")\
     .option("overwriteSchema", "true")\
     .save(bronze_tweets)
+else:
+  df_tweets\
+    .write\
+    .format("delta")\
+    .mode("overwrite")\
+    .option("overwriteSchema", "true")\
+    .save(bronze_tweets)
+
+# COMMAND ----------
+
+# DBTITLE 1,Armazenamento base vendas
+if arquivo_existe(raw_path_recurso):
+  df\
+    .write\
+    .format("delta")\
+    .mode("append")\
+    .option("overwriteSchema", "true")\
+    .save(bronze_base_vendas)
+else:
+  df\
+    .write\
+    .format("delta")\
+    .mode("overwrite")\
+    .option("overwriteSchema", "true")\
+    .save(bronze_base_vendas)
