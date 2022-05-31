@@ -18,8 +18,14 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "marca_linha",
-				"fileSystem": "silver"
+				"folderPath": {
+					"value": "@dataset().dsdlsparquet_arquivo",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().dsdlsparquet_diretorio",
+					"type": "Expression"
+				}
 			},
 			"compressionCodec": "snappy"
 		},
