@@ -7,10 +7,12 @@
 		},
 		"parameters": {
 			"dsdlsparquet_diretorio": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "teste"
 			},
 			"dsdlsparquet_arquivo": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "teste"
 			}
 		},
 		"annotations": [],
