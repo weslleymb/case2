@@ -22,6 +22,11 @@ silver_path_vendas = "dbfs:/mnt/silver/vendas"
 
 # COMMAND ----------
 
+# DBTITLE 1,Funcoes UDF
+# MAGIC %run "./funcoes"
+
+# COMMAND ----------
+
 # DBTITLE 1,Checagem arquivo origem
 if arquivo_existe(bronze_path_base_vendas) == False:
   dbutils.notebook.exit('stop')
