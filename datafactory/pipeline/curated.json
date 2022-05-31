@@ -19,7 +19,8 @@
 						"type": "ParquetSource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
+							"recursive": false,
+							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						}
 					},
@@ -45,7 +46,8 @@
 						"referenceName": "dsdlsparquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsdlsparquet_diretorio": "silver"
+							"dsdlsparquet_diretorio": "silver",
+							"dsdlsparquet_arquivo": "marca_linha"
 						}
 					}
 				],
