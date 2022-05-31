@@ -412,7 +412,7 @@
 									]
 								},
 								{
-									"name": "get_twitter",
+									"name": "raw_base_vendas_e_twitter",
 									"type": "DatabricksNotebook",
 									"dependsOn": [
 										{
@@ -431,7 +431,7 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"notebookPath": "/Repos/case2/case2/databricks/get_twitter",
+										"notebookPath": "/Repos/case2/case2/databricks/raw_base_vendas_e_twitter",
 										"baseParameters": {
 											"input": {
 												"value": "@concat(replace(item().name, ' ', '_'), '.txt')",
