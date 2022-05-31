@@ -13,7 +13,7 @@ silver_path_tabela2 = "dbfs:/mnt/silver/tabela2_marca_linha"
 
 silver_path_tabela3 = "dbfs:/mnt/silver/tabela3_marca_ano_mes"
 
-silver_path_tabela4 = "dbfs:/mnt/silver/tabela3_linha_ano_mes"
+silver_path_tabela4 = "dbfs:/mnt/silver/tabela4_linha_ano_mes"
 
 silver_path_marca_linha = "dbfs:/mnt/silver/marca_linha"
 
