@@ -20,13 +20,13 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@dataset().dsdlsparquet_arquivo",
+				"folderPath": "@dataset().dsdlsparquet_arquivo",
 				"fileSystem": {
 					"value": "@dataset().dsdlsparquet_diretorio",
 					"type": "Expression"
 				}
 			},
-			"compressionCodec": "snappy"
+			"compressionCodec": "none"
 		},
 		"schema": []
 	}
