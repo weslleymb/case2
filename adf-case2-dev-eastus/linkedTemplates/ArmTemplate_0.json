@@ -265,6 +265,73 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/transform')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "transform-vendas",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/case2/case2/databricks/transform-twitter"
+						},
+						"linkedServiceName": {
+							"referenceName": "lsdbw",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "transform-twitter",
+						"type": "DatabricksNotebook",
+						"dependsOn": [
+							{
+								"activity": "transform-vendas",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/case2/case2/databricks/transform-twitter"
+						},
+						"linkedServiceName": {
+							"referenceName": "lsdbw",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "transform"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lsdbw')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dsdls')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -374,73 +441,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/lssqldb')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/transform')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "transform-vendas",
-						"type": "DatabricksNotebook",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Repos/case2/case2/databricks/transform-twitter"
-						},
-						"linkedServiceName": {
-							"referenceName": "lsdbw",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "transform-twitter",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "transform-vendas",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Repos/case2/case2/databricks/transform-twitter"
-						},
-						"linkedServiceName": {
-							"referenceName": "lsdbw",
-							"type": "LinkedServiceReference"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "transform"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lsdbw')]"
 			]
 		},
 		{
@@ -802,6 +802,65 @@
 								}
 							}
 						]
+					},
+					{
+						"name": "tweets",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'tweets'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "silver",
+									"dsdlsparquet_arquivo": "tweets"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "tweets"
+								}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -809,7 +868,7 @@
 					"cancelAfter": {}
 				},
 				"folder": {
-					"name": "Curated"
+					"name": "curated"
 				},
 				"annotations": []
 			},
