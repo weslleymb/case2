@@ -1,0 +1,24 @@
+{
+	"name": "dssqldb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lssqldb",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"dssqldb_tabela": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().dssqldb_tabela",
+				"type": "Expression"
+			}
+		}
+	}
+}
