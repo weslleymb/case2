@@ -424,6 +424,91 @@
 							"enableStaging": false,
 							"translator": {
 								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "chave",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "chave",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "id",
+											"type": "Int64",
+											"physicalType": "INT64"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int64",
+											"physicalType": "bigint"
+										}
+									},
+									{
+										"source": {
+											"name": "usuario",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "usuario",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "msg",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "msg",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "data",
+											"type": "DateTime",
+											"physicalType": "INT96"
+										},
+										"sink": {
+											"name": "data",
+											"physicalType": "timestamp"
+										}
+									},
+									{
+										"source": {
+											"name": "arquivo_origem",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "arquivo_origem",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "data_carga",
+											"type": "DateTime",
+											"physicalType": "INT96"
+										},
+										"sink": {
+											"name": "data_carga",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									}
+								],
 								"typeConversion": true,
 								"typeConversionSettings": {
 									"allowDataTruncation": true,
