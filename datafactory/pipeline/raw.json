@@ -94,15 +94,7 @@
 										"fileExtension": ".txt"
 									}
 								},
-								"enableStaging": false,
-								"translator": {
-									"type": "TabularTranslator",
-									"typeConversion": true,
-									"typeConversionSettings": {
-										"allowDataTruncation": true,
-										"treatBooleanAsNumber": false
-									}
-								}
+								"enableStaging": false
 							},
 							"inputs": [
 								{
@@ -113,19 +105,6 @@
 										"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com",
 										"dsfsexcel_arquivo_on_prem": {
 											"value": "@item().name",
-											"type": "Expression"
-										}
-									}
-								}
-							],
-							"outputs": [
-								{
-									"referenceName": "dsdls",
-									"type": "DatasetReference",
-									"parameters": {
-										"dsdls_container": "raw",
-										"dsdls_arquivo": {
-											"value": "@concat(replace(item().name, ' ', '_'), '.txt')",
 											"type": "Expression"
 										}
 									}
