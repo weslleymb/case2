@@ -115,7 +115,7 @@
 									"referenceName": "dsdls",
 									"type": "DatasetReference",
 									"parameters": {
-										"dsdls_container": "bronze",
+										"dsdls_container": "raw",
 										"dsdls_arquivo": {
 											"value": "@concat(replace(item().name, ' ', '_'), '.txt')",
 											"type": "Expression"
