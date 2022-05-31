@@ -10,8 +10,6 @@ bronze_base_vendas = "dbfs:/mnt/bronze/base_vendas"
 
 df_bronze_base_vendas = spark.read.format("delta").load(bronze_base_vendas)
 
-df_bronze_base_vendas.select("DATA_VENDA").distinct().display()
-
 # COMMAND ----------
 
 df_bronze_base_vendas.display()
