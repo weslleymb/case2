@@ -40,7 +40,7 @@ bronze_base_vendas = "dbfs:/mnt/bronze/base_vendas"
 
 var_timezone = pytz.timezone('America/Sao_Paulo')
 
-var_data_carga = datetime.now(tz=timezone)
+var_data_carga = datetime.now(tz=var_timezone)
 
 # COMMAND ----------
 
