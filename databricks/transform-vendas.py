@@ -130,7 +130,7 @@ df_marca_linha\
 # DBTITLE 1,Tabela Vendas
 df_vendas = df_bronze_base_vendas_dedup\
   .withColumn("chave", concat(col("str_marca"), lit(" - "), col("str_linha")))\
-  .select("chave", "int_marca", "str_marca", "int_linha", "str_linha", "ano", "mes", "dt_venda", "int_qtd_venda")\
+  .select("chave", "int_marca", "str_marca", "int_linha", "str_linha", "ano", "mes", "dt_venda", "int_qtd_venda", "arquivo_origem", "data_carga")\
   .distinct()
 
 df_vendas\
