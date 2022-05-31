@@ -678,7 +678,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Repos/case2/case2/databricks/transform-twitter"
+							"notebookPath": "/Repos/case2/case2/databricks/transform-vendas"
 						},
 						"linkedServiceName": {
 							"referenceName": "lsdbw",
