@@ -9,6 +9,15 @@ pip install tweepy
 
 # COMMAND ----------
 
+# DBTITLE 1,Importacao bibliotecas
+import tweepy
+import pandas as pd
+from pyspark.sql.functions import *
+import pytz
+from datetime import datetime
+
+# COMMAND ----------
+
 # DBTITLE 1,Variaveis
 dbutils.widgets.text("input", "","")
 param = dbutils.widgets.get("input")
@@ -17,44 +26,41 @@ raw_path_storage = "dbfs:/mnt/raw/"
 
 raw_path_recurso = raw_path_storage + param
 
-consumer_key = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter-api-key")
+raw_consumer_key = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter-api-key")
 
-consumer_secret = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter-api-secret")
+raw_consumer_secret = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter-api-secret")
 
-access_token = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter-access-token")
+raw_access_token = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter-access-token")
 
-access_token_secret = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter-access-token-secret")
+raw_access_token_secret = dbutils.secrets.get(scope = "dbw-kv-scope", key = "twitter-access-token-secret")
 
 bronze_tweets = "dbfs:/mnt/bronze/tweets"
 
 bronze_base_vendas = "dbfs:/mnt/bronze/base_vendas"
 
-# COMMAND ----------
+var_timezone = pytz.timezone('America/Sao_Paulo')
 
-# DBTITLE 1,Importacao bibliotecas
-import tweepy
-import pandas as pd
-from pyspark.sql.functions import *
+var_data_carga = datetime.now(tz=timezone)
 
 # COMMAND ----------
 
 # DBTITLE 1,Gera base de "linhas" para pesquisa 
-df = spark.read.csv(raw_path_recurso, header='true')
+df_base_vendas = spark.read.csv(raw_path_recurso, header='true')
 
-df_pesquisa = df.select("MARCA", "LINHA").distinct()
+df_pesquisa = df_base_vendas.select("MARCA", "LINHA").distinct()
 
 pd_pesquisa = df_pesquisa.toPandas()
 
 # COMMAND ----------
 
 # DBTITLE 1,Extracao tweets
-autorizar = tweepy.OAuthHandler(consumer_key, consumer_secret)
+autorizar = tweepy.OAuthHandler(raw_consumer_key, raw_consumer_secret)
 
-autorizar.set_access_token(access_token, access_token_secret)
+autorizar.set_access_token(raw_access_token, raw_access_token_secret)
 
 api = tweepy.API(autorizar)
 
-pd_tweets = pd.DataFrame(columns = ["id", "usuario", "mensagem", "data", "marca", "linha", "arquivo_origem"])
+pd_tweets = pd.DataFrame(columns = ["id", "usuario", "mensagem", "data", "marca", "linha", "arquivo_origem", "data_carga"])
 
 for marca, linha in pd_pesquisa.itertuples(index=False):
   
@@ -64,7 +70,7 @@ for marca, linha in pd_pesquisa.itertuples(index=False):
 
   for tweet in resultados:
     
-    pd_tweets = pd_tweets.append({'id':tweet.id, 'usuario':tweet.user.name, 'mensagem':tweet.text, 'data':tweet.created_at, 'marca':marca, 'linha':linha, 'arquivo_origem':param}, ignore_index=True)
+    pd_tweets = pd_tweets.append({'id':tweet.id, 'usuario':tweet.user.name, 'mensagem':tweet.text, 'data':tweet.created_at, 'marca':marca, 'linha':linha, 'arquivo_origem':param, 'data_carga':var_data_carga}, ignore_index=True)
     
 df_tweets = spark.createDataFrame(pd_tweets)
 
@@ -72,7 +78,10 @@ df_tweets = spark.createDataFrame(pd_tweets)
 
 # COMMAND ----------
 
-#df_tweets.groupBy("palavra_chave", "arquivo_origem").agg(count("*")).display()
+# DBTITLE 1,Base Vendas com Referencias
+df_base_vendas_referencia = df_base_vendas\
+  .withColumn("arquivo_origem", lit(param))\
+  .withColumn("data_carga", lit(var_data_carga))
 
 # COMMAND ----------
 
@@ -96,14 +105,14 @@ else:
 
 # DBTITLE 1,Armazenamento base vendas
 if arquivo_existe(raw_path_recurso):
-  df\
+  df_base_vendas_referencia\
     .write\
     .format("delta")\
     .mode("append")\
     .option("overwriteSchema", "true")\
     .save(bronze_base_vendas)
 else:
-  df\
+  df_base_vendas_referencia\
     .write\
     .format("delta")\
     .mode("overwrite")\
