@@ -1,22 +1,38 @@
 # Databricks notebook source
+# DBTITLE 1,Bibliotecas
 from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# DBTITLE 1,Variaveis
 bronze_path_tweets = "dbfs:/mnt/bronze/tweets"
 
-silver_path_tweets = "dbfs:/mnt/silver/vendas"
+silver_path_tweets = "dbfs:/mnt/silver/tweets"
 
 # COMMAND ----------
 
-df_bronze_tweets = spark.read.format("delta").load(bronze_path_tweets)
+# DBTITLE 1,Funcoes UDF
+# MAGIC %run "./funcoes"
 
-df_bronze_tweets\
+# COMMAND ----------
+
+# DBTITLE 1,Checagem arquivo origem
+if arquivo_existe(bronze_path_tweets) == False:
+  dbutils.notebook.exit('stop')
+else:
+  df_bronze_tweets = spark.read.format("delta").load(bronze_path_tweets)
+  if (df_bronze_tweets.count()==0): 
+    dbutils.notebook.exit('stop')
+
+# COMMAND ----------
+
+# DBTITLE 1,Chaveamento e Armazenamento
+df_bronze_tweets_chaveado = df_bronze_tweets\
   .withColumn("chave", concat(col("marca"), lit(" - "), col("linha")))\
   .withColumn("msg", regexp_replace(col("mensagem"), "[\n\r]", " "))\
   .select("chave", "id", "usuario", "msg", "data", "arquivo_origem")
 
-df_bronze_tweets\
+df_bronze_tweets_chaveado\
   .write\
   .format("delta")\
   .mode("overwrite")\

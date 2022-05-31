@@ -1,4 +1,5 @@
 # Databricks notebook source
+# DBTITLE 1,Bibliotecas
 from pyspark.sql.functions import *
 from pyspark.sql.window import *
 
@@ -21,7 +22,13 @@ silver_path_vendas = "dbfs:/mnt/silver/vendas"
 
 # COMMAND ----------
 
-df_bronze_base_vendas = spark.read.format("delta").load(bronze_path_base_vendas)
+# DBTITLE 1,Checagem arquivo origem
+if arquivo_existe(bronze_path_base_vendas) == False:
+  dbutils.notebook.exit('stop')
+else:
+  df_bronze_base_vendas = spark.read.format("delta").load(bronze_path_base_vendas)
+  if (df_bronze_base_vendas.count()==0): 
+    dbutils.notebook.exit('stop')
 
 # COMMAND ----------
 
