@@ -10,7 +10,7 @@ bronze_base_vendas = "dbfs:/mnt/bronze/base_vendas"
 
 df_bronze_base_vendas = spark.read.format("delta").load(bronze_base_vendas)
 
-#df_bronze_base_vendas.select("DATA_VENDA").distinct().display()
+df_bronze_base_vendas.select("DATA_VENDA").distinct().display()
 
 # COMMAND ----------
 
@@ -71,3 +71,21 @@ df_tabela4 = df_bronze_base_vendas_dedup\
   .groupBy("str_linha", "ano", "mes").agg(sum(col("int_qtd_venda")).alias("qtd"))
 
 df_tabela4.display()
+
+# COMMAND ----------
+
+# DBTITLE 1,Tabela Marca
+df_marca = df_bronze_base_vendas_dedup.select("int_marca", "str_marca").distinct()
+
+df_marca.display()
+
+# COMMAND ----------
+
+# DBTITLE 1,Tabela Linha
+df_marca = df_bronze_base_vendas_dedup.select("int_marca", "int_linha", "str_linha").distinct()
+
+df_marca.display()
+
+# COMMAND ----------
+
+df_bronze_base_vendas_dedup.select("int_marca", "str_marca", "int_linha", "str_linha").distinct().orderBy("int_marca", "int_linha").display()

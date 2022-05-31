@@ -41,7 +41,7 @@ from pyspark.sql.functions import *
 # DBTITLE 1,Gera base de "linhas" para pesquisa 
 df = spark.read.csv(raw_path_recurso, header='true')
 
-df_pesquisa = df.select("LINHA").distinct()
+df_pesquisa = df.select("MARCA", "LINHA").distinct()
 
 pd_pesquisa = df_pesquisa.toPandas()
 
@@ -54,19 +54,21 @@ autorizar.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(autorizar)
 
-pd_tweets = pd.DataFrame(columns = ["id", "usuario", "mensagem", "data", "palavra_chave", "arquivo_origem"])
+pd_tweets = pd.DataFrame(columns = ["id", "usuario", "mensagem", "data", "marca", "linha", "arquivo_origem"])
 
-for indice, linha in pd_pesquisa.iterrows():
+for marca, linha in pd_pesquisa.itertuples(index=False):
   
-  query = 'Boticário ' + linha['LINHA']
+  query = marca + ' ' + linha
 
   resultados = api.search_tweets(q=query, lang='pt-br', count=50)
 
   for tweet in resultados:
     
-    pd_tweets = pd_tweets.append({'id':tweet.id, 'usuario':tweet.user.name, 'mensagem':tweet.text, 'data':tweet.created_at, 'palavra_chave':linha['LINHA'], 'arquivo_origem':param}, ignore_index=True)
+    pd_tweets = pd_tweets.append({'id':tweet.id, 'usuario':tweet.user.name, 'mensagem':tweet.text, 'data':tweet.created_at, 'marca':marca, 'linha':linha, 'arquivo_origem':param}, ignore_index=True)
     
 df_tweets = spark.createDataFrame(pd_tweets)
+
+#df_tweets.display()
 
 # COMMAND ----------
 
