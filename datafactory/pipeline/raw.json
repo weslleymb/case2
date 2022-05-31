@@ -1,5 +1,5 @@
 {
-	"name": "raw_import_files",
+	"name": "raw",
 	"properties": {
 		"activities": [
 			{
@@ -105,6 +105,19 @@
 										"dsfsexcel_usuario_on_prem": "w.de.moura.barbosa@avanade.com",
 										"dsfsexcel_arquivo_on_prem": {
 											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "dsdls",
+									"type": "DatasetReference",
+									"parameters": {
+										"dsdls_container": "bronze",
+										"dsdls_arquivo": {
+											"value": "@concat(replace(item().name, ' ', '_'), '.txt')",
 											"type": "Expression"
 										}
 									}
