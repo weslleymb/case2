@@ -1,0 +1,23 @@
+{
+	"name": "lsdbw",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-4284380302982108.8.azuredatabricks.net",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "lskeyvault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "token-dbw-case2-dev-eastus"
+			},
+			"existingClusterId": "tmp"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
