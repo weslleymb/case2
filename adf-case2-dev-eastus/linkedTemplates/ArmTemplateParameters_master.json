@@ -17,6 +17,9 @@
 		"lskeyvault_properties_typeProperties_baseUrl": {
 			"value": "https://kv-case2-dev-eastus.vault.azure.net/"
 		},
+		"lssqldb_properties_typeProperties_connectionString_secretName": {
+			"value": "connstring-sql-db"
+		},
 		"containerUri": {
 			"value": ""
 		},

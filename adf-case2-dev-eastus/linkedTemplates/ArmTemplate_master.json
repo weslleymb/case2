@@ -23,6 +23,10 @@
 			"type": "string",
 			"defaultValue": "https://kv-case2-dev-eastus.vault.azure.net/"
 		},
+		"lssqldb_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "connstring-sql-db"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -61,6 +65,9 @@
 					},
 					"lsdls_properties_typeProperties_url": {
 						"value": "[parameters('lsdls_properties_typeProperties_url')]"
+					},
+					"lssqldb_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('lssqldb_properties_typeProperties_connectionString_secretName')]"
 					}
 				}
 			},

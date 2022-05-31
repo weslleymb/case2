@@ -22,12 +22,391 @@
 		"lskeyvault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://kv-case2-dev-eastus.vault.azure.net/"
+		},
+		"lssqldb_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "connstring-sql-db"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/curated')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "marca_linha",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'marca_linha'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "silver",
+									"dsdlsparquet_arquivo": "marca_linha"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "marca_linha"
+								}
+							}
+						]
+					},
+					{
+						"name": "vendas",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'vendas'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "silver",
+									"dsdlsparquet_arquivo": "vendas"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "vendas"
+								}
+							}
+						]
+					},
+					{
+						"name": "tabela1_ano_mes",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'tabela1_ano_mes'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "silver",
+									"dsdlsparquet_arquivo": "tabela1_ano_mes"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "tabela1_ano_mes"
+								}
+							}
+						]
+					},
+					{
+						"name": "tabela2_marca_linha",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'tabela2_marca_linha'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "silver",
+									"dsdlsparquet_arquivo": "tabela2_marca_linha"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "tabela2_marca_linha"
+								}
+							}
+						]
+					},
+					{
+						"name": "tabela4_linha_ano_mes",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'tabela4_linha_ano_mes'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "silver",
+									"dsdlsparquet_arquivo": "tabela4_linha_ano_mes"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "tabela4_linha_ano_mes"
+								}
+							}
+						]
+					},
+					{
+						"name": "tabela3_marca_ano_mes",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'tabela3_marca_ano_mes'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "silver",
+									"dsdlsparquet_arquivo": "tabela3_marca_ano_mes"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "tabela3_marca_ano_mes"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Curated"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dsdlsparquet')]",
+				"[concat(variables('factoryId'), '/datasets/dssqldb')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/raw_import_files')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -272,6 +651,47 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/dsdlsparquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lsdls",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"dsdlsparquet_diretorio": {
+						"type": "string",
+						"defaultValue": "teste"
+					},
+					"dsdlsparquet_arquivo": {
+						"type": "string",
+						"defaultValue": "teste"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@dataset().dsdlsparquet_arquivo",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().dsdlsparquet_diretorio",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lsdls')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/dsfsexcel')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -325,6 +745,35 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/lsfsexcel')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dssqldb')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lssqldb",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"dssqldb_tabela": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().dssqldb_tabela",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lssqldb')]"
 			]
 		},
 		{
@@ -433,6 +882,33 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lssqldb')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "lskeyvault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('lssqldb_properties_typeProperties_connectionString_secretName')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/lskeyvault')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
