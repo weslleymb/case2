@@ -186,7 +186,10 @@
 									"typeProperties": {
 										"notebookPath": "/Repos/case2/case2/databricks/get_twitter",
 										"baseParameters": {
-											"input": "@concat(replace(item().name, ' ', '_'), '.txt')"
+											"input": {
+												"value": "@concat(replace(item().name, ' ', '_'), '.txt')",
+												"type": "Expression"
+											}
 										}
 									},
 									"linkedServiceName": {
@@ -325,6 +328,35 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/lsdbw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-4284380302982108.8.azuredatabricks.net",
+					"accessToken": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "lskeyvault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "token-dbw-case2-dev-eastus"
+					},
+					"existingClusterId": "0530-000536-60vu78if"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/lskeyvault')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/lsdls')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -443,35 +475,6 @@
 			"apiVersion": "2018-06-01",
 			"properties": {},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/lsdbw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureDatabricks",
-				"typeProperties": {
-					"domain": "https://adb-4284380302982108.8.azuredatabricks.net",
-					"accessToken": {
-						"type": "AzureKeyVaultSecret",
-						"store": {
-							"referenceName": "lskeyvault",
-							"type": "LinkedServiceReference"
-						},
-						"secretName": "token-dbw-case2-dev-eastus"
-					},
-					"existingClusterId": "0530-000536-60vu78if"
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/linkedServices/lskeyvault')]"
-			]
 		}
 	]
 }
