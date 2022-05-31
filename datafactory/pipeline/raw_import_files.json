@@ -131,6 +131,36 @@
 									}
 								}
 							]
+						},
+						{
+							"name": "get_twitter",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "Carregar arquivo",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Repos/case2/case2/databricks/get_twitter",
+								"baseParameters": {
+									"input": "@concat(replace(item().name, ' ', '_'), '.txt')"
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "lsdbw",
+								"type": "LinkedServiceReference"
+							}
 						}
 					]
 				}
