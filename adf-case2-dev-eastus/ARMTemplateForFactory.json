@@ -461,7 +461,7 @@
 						},
 						"secretName": "token-dbw-case2-dev-eastus"
 					},
-					"existingClusterId": "tmp"
+					"existingClusterId": "0530-000536-60vu78if"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
