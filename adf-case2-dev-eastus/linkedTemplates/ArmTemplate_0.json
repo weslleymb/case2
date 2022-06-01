@@ -406,7 +406,7 @@
 							"type": "Expression"
 						}
 					},
-					"compressionCodec": "snappy"
+					"compressionCodec": "none"
 				},
 				"schema": []
 			},
@@ -1068,6 +1068,169 @@
 				"[concat(variables('factoryId'), '/datasets/dsfsexcel')]",
 				"[concat(variables('factoryId'), '/datasets/dsdls')]",
 				"[concat(variables('factoryId'), '/linkedServices/lsdbw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/testes')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "tweets",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'tweets'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "chave",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "chave",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "id",
+											"type": "Int64",
+											"physicalType": "INT64"
+										},
+										"sink": {
+											"name": "id",
+											"type": "Int64",
+											"physicalType": "bigint"
+										}
+									},
+									{
+										"source": {
+											"name": "usuario",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "usuario",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "msg",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "msg",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "data",
+											"type": "DateTime",
+											"physicalType": "INT96"
+										},
+										"sink": {
+											"name": "data",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "arquivo_origem",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "arquivo_origem",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "data_carga",
+											"type": "DateTime",
+											"physicalType": "INT96"
+										},
+										"sink": {
+											"name": "data_carga",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "silver",
+									"dsdlsparquet_arquivo": "tweets"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "tweets"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dsdlsparquet')]",
+				"[concat(variables('factoryId'), '/datasets/dssqldb')]"
 			]
 		},
 		{
