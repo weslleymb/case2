@@ -31,7 +31,7 @@ df_bronze_tweets_chaveado = df_bronze_tweets\
   .withColumn("chave", concat(col("marca"), lit(" - "), col("linha")))\
   .withColumn("msg", regexp_replace(col("mensagem"), "[\n\r]", " "))\
   .drop("mensagem")\
-  .select("chave", "id", "usuario", "msg", "data", "marca", "linha", "arquivo_origem", "data_carga")
+  .select("chave", "id", "usuario", "msg", "data", "arquivo_origem", "data_carga")
 
 df_bronze_tweets_chaveado\
   .write\
