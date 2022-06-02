@@ -29,3 +29,13 @@ try:
     extra_configs = {"fs.azure.account.key.dlscase2deveastus.blob.core.windows.net":dbutils.secrets.get(scope = "dbw-kv-scope", key = "storageaccount-key")})
 except:
   pass
+
+# COMMAND ----------
+
+try:
+  dbutils.fs.mount(
+    source = "wasbs://goldcase2@dlscase2deveastus.blob.core.windows.net",
+    mount_point = "/mnt/goldcase2",
+    extra_configs = {"fs.azure.account.key.dlscase2deveastus.blob.core.windows.net":dbutils.secrets.get(scope = "dbw-kv-scope", key = "storageaccount-key")})
+except:
+  pass

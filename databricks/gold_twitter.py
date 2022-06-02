@@ -6,10 +6,10 @@ spark = pyspark.sql.SparkSession.builder.appName("busca_twitter") \
     .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
     .getOrCreate()
 import synapse.ml
-
 import synapse.ml
 from synapse.ml.cognitive import *
 from pyspark.sql.functions import *
+from delta.tables import *
 
 # COMMAND ----------
 
@@ -18,7 +18,7 @@ silver_path_tweets = "dbfs:/mnt/silver/tweets"
 
 service_key = dbutils.secrets.get(scope = "dbw-kv-scope", key = "key-cog")
 
-gold_path_tweets = "dbfs:/mnt/gold/tweets"
+gold_path_tweets = "dbfs:/mnt/goldcase2/tweets"
 
 # COMMAND ----------
 
@@ -61,14 +61,31 @@ df_result = sentiment.transform(df_process_busca_tweets).select("chave", "id", "
 # COMMAND ----------
 
 # DBTITLE 1,Armazenamento
-df_tmp = df_result\
-  .withColumn("data_tweet", col("dt_tweet").cast("date"))\
-  .drop("dt_tweet")\
-  .withColumnRenamed("data_tweet", "dt_tweet")\
-  .select("chave", "id", "usuario", "msg", "sentiment", "dt_tweet", "data_carga")
-
-df_result\
-  .write\
-  .format("delta")\
-  .mode("append")\
-  .save(gold_path_tweets)
+if arquivo_existe(gold_path_tweets) == False:
+  df_result\
+    .write\
+    .format("delta")\
+    .mode("append")\
+    .save(gold_path_tweets)
+else:
+  df_destino = DeltaTable.forPath(spark, gold_path_tweets)
+  df_destino.alias("destino")\
+    .merge(
+      df_result.alias("origem"), """
+        destino.chave = origem.chave 
+        and destino.id = origem.id 
+        and destino.usuario = origem.usuario
+        and destino.msg = origem.msg
+        and destino.dt_tweet = origem.dt_tweet
+      """
+    )\
+    .whenNotMatchedInsert(values = {
+      "chave": "origem.chave",
+      "id": "origem.id",
+      "usuario": "origem.usuario", 
+      "msg": "origem.msg", 
+      "sentiment": "origem.sentiment", 
+      "dt_tweet": "origem.dt_tweet",
+      "data_carga": "origem.data_carga"
+    })\
+    .execute()

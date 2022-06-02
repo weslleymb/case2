@@ -40,7 +40,7 @@ df_process_tweets_dedup = df_bronze_tweets\
     .over(particao_dedup)
   )\
   .filter("dedup = 1")\
-  .select("chave", "id", "usuario", "msg", col("data").alias("dt_tweet"), "data_carga")
+  .select("chave", "id", "usuario", "msg", col("data").cast("date").alias("dt_tweet"), "data_carga")
 
 #df_process_tweets_dedup.display()
 

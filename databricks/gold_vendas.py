@@ -7,17 +7,17 @@ from pyspark.sql.functions import *
 # DBTITLE 1,Variaveis
 silver_path_vendas = "dbfs:/mnt/silver/vendas"
 
-gold_path_tabela1 = "dbfs:/mnt/gold/tabela1_ano_mes"
+gold_path_tabela1 = "dbfs:/mnt/goldcase2/tabela1_ano_mes"
 
-gold_path_tabela2 = "dbfs:/mnt/gold/tabela2_marca_linha"
+gold_path_tabela2 = "dbfs:/mnt/goldcase2/tabela2_marca_linha"
 
-gold_path_tabela3 = "dbfs:/mnt/gold/tabela3_marca_ano_mes"
+gold_path_tabela3 = "dbfs:/mnt/goldcase2/tabela3_marca_ano_mes"
 
-gold_path_tabela4 = "dbfs:/mnt/gold/tabela4_linha_ano_mes"
+gold_path_tabela4 = "dbfs:/mnt/goldcase2/tabela4_linha_ano_mes"
 
-gold_path_marca_linha = "dbfs:/mnt/gold/marca_linha"
+gold_path_marca_linha = "dbfs:/mnt/goldcase2/marca_linha"
 
-gold_path_vendas = "dbfs:/mnt/gold/vendas"
+gold_path_vendas = "dbfs:/mnt/goldcase2/vendas"
 
 # COMMAND ----------
 
