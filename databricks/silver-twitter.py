@@ -2,6 +2,7 @@
 # DBTITLE 1,Bibliotecas
 from pyspark.sql.functions import *
 from pyspark.sql.window import *
+from delta.tables import *
 
 # COMMAND ----------
 

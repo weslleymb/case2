@@ -2,6 +2,7 @@
 # DBTITLE 1,Bibliotecas
 from pyspark.sql.functions import *
 from pyspark.sql.window import *
+from delta.tables import *
 
 # COMMAND ----------
 
@@ -31,7 +32,6 @@ else:
 particao_dedup = Window.partitionBy("ID_MARCA", "MARCA", "ID_LINHA", "LINHA", "DATA_VENDA").orderBy(col("data_carga").cast("date").desc())
 
 df_process_vendas_dedup = df_bronze_vendas\
-  .withColumn("chave", concat(col("str_marca"), lit(" - "), col("str_linha")))\
   .withColumn("int_marca", col("ID_MARCA").cast("integer"))\
   .withColumn("str_marca", trim("MARCA"))\
   .withColumn("int_linha", col("ID_LINHA").cast("integer"))\
@@ -40,6 +40,7 @@ df_process_vendas_dedup = df_bronze_vendas\
   .withColumn("mes", month("DATA_VENDA"))\
   .withColumn("dt_venda", to_date("DATA_VENDA"))\
   .withColumn("int_qtd_venda", col("QTD_VENDA").cast("integer"))\
+  .withColumn("chave", concat(col("str_marca"), lit(" - "), col("str_linha")))\
   .withColumn(
     "dedup", 
     row_number()
@@ -86,13 +87,8 @@ else:
       "str_linha": "origem.str_linha",
       "ano": "origem.ano",
       "mes": "origem.mes",
-      "dt_venda": "origem.dt_venda"
-      "int_qtd_venda": "origem.int_qtd_venda"
+      "dt_venda": "origem.dt_venda",
+      "int_qtd_venda": "origem.int_qtd_venda",
       "data_carga": "origem.data_carga"
     })\
     .execute()
-
-# COMMAND ----------
-
-# DBTITLE 1,Tabela Vendas
-
