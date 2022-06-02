@@ -3,7 +3,7 @@
 #https://microsoft.github.io/SynapseML/docs/next/getting_started/installation/
 
 import pyspark
-spark = pyspark.sql.SparkSession.builder.appName("MyApp") \
+spark = pyspark.sql.SparkSession.builder.appName("busca_twitter") \
     .config("spark.jars.packages", "com.microsoft.azure:synapseml_2.12:0.9.5") \
     .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
     .getOrCreate()

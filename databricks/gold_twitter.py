@@ -1,5 +1,14 @@
 # Databricks notebook source
 # DBTITLE 1,Bibliotecas
+import pyspark
+spark = pyspark.sql.SparkSession.builder.appName("busca_twitter") \
+    .config("spark.jars.packages", "com.microsoft.azure:synapseml_2.12:0.9.5") \
+    .config("spark.jars.repositories", "https://mmlspark.azureedge.net/maven") \
+    .getOrCreate()
+import synapse.ml
+
+import synapse.ml
+from synapse.ml.cognitive import *
 from pyspark.sql.functions import *
 
 # COMMAND ----------
@@ -7,7 +16,9 @@ from pyspark.sql.functions import *
 # DBTITLE 1,Variaveis
 silver_path_tweets = "dbfs:/mnt/silver/tweets"
 
-gold_path_tweets = "dbfs:/mnt/silver/tweets"
+service_key = dbutils.secrets.get(scope = "dbw-kv-scope", key = "key-cog")
+
+gold_path_tweets = "dbfs:/mnt/gold/tweets"
 
 # COMMAND ----------
 
@@ -35,4 +46,29 @@ else:
 
 # COMMAND ----------
 
+df_process_busca_tweets = df_process_tweets.withColumn("linguagem", lit("pt-BR"))
 
+sentiment = (TextSentiment()
+    .setSubscriptionKey(service_key)
+    .setTextCol("msg")
+    .setOutputCol("sentiment")
+    .setErrorCol("error")
+    .setLanguageCol("linguagem")
+    .setUrl("https://eastus.api.cognitive.microsoft.com/text/analytics/v3.0/sentiment"))
+
+df_result = sentiment.transform(df_process_busca_tweets).select("chave", "id", "usuario", "msg", col("sentiment")[0].getItem("sentiment").alias("sentiment"), "dt_tweet", "data_carga")
+
+# COMMAND ----------
+
+# DBTITLE 1,Armazenamento
+df_tmp = df_result\
+  .withColumn("data_tweet", col("dt_tweet").cast("date"))\
+  .drop("dt_tweet")\
+  .withColumnRenamed("data_tweet", "dt_tweet")\
+  .select("chave", "id", "usuario", "msg", "sentiment", "dt_tweet", "data_carga")
+
+df_result\
+  .write\
+  .format("delta")\
+  .mode("append")\
+  .save(gold_path_tweets)
