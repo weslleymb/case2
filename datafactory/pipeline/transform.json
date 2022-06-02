@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "transform-vendas",
+				"name": "silver-vendas",
 				"type": "DatabricksNotebook",
 				"dependsOn": [],
 				"policy": {
@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Repos/case2/case2/databricks/transform-vendas"
+					"notebookPath": "/Repos/case2/case2/databricks/silver-vendas"
 				},
 				"linkedServiceName": {
 					"referenceName": "lsdbw",
@@ -23,11 +23,11 @@
 				}
 			},
 			{
-				"name": "transform-twitter",
+				"name": "silver-twitter",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "transform-vendas",
+						"activity": "silver-vendas",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -42,7 +42,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Repos/case2/case2/databricks/transform-twitter"
+					"notebookPath": "/Repos/case2/case2/databricks/silver-twitter"
 				},
 				"linkedServiceName": {
 					"referenceName": "lsdbw",
