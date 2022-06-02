@@ -6,7 +6,7 @@ from pyspark.sql.window import *
 # COMMAND ----------
 
 # DBTITLE 1,Variaveis
-bronze_path_base_vendas = "dbfs:/mnt/bronze/base_vendas"
+bronze_path_vendas = "dbfs:/mnt/bronze/vendas"
 
 silver_path_tabela1 = "dbfs:/mnt/silver/tabela1_ano_mes"
 
