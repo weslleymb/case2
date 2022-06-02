@@ -31,6 +31,7 @@ else:
 particao_dedup = Window.partitionBy("ID_MARCA", "MARCA", "ID_LINHA", "LINHA", "DATA_VENDA").orderBy(col("data_carga").cast("date").desc())
 
 df_process_vendas_dedup = df_bronze_vendas\
+  .withColumn("chave", concat(col("str_marca"), lit(" - "), col("str_linha")))\
   .withColumn("int_marca", col("ID_MARCA").cast("integer"))\
   .withColumn("str_marca", trim("MARCA"))\
   .withColumn("int_linha", col("ID_LINHA").cast("integer"))\
@@ -45,7 +46,7 @@ df_process_vendas_dedup = df_bronze_vendas\
     .over(particao_dedup)
   )\
   .filter("dedup = 1")\
-  .drop("ID_MARCA", "MARCA", "ID_LINHA", "LINHA", "DATA_VENDA", "QTD_VENDA", "dedup", "arquivo_origem")
+  .select("chave", "int_marca", "str_marca", "int_linha", "str_linha", "ano", "mes", "dt_venda", "int_qtd_venda", "data_carga")\
 
 #df_process_vendas_dedup.display()
 
@@ -63,7 +64,8 @@ else:
   df_destino.alias("destino")\
     .merge(
       df_process_vendas_dedup.alias("origem"), """
-        destino.int_marca = origem.int_marca 
+        destino.chave = origem.chave 
+        and destino.int_marca = origem.int_marca 
         and destino.str_marca = origem.str_marca 
         and destino.int_linha = origem.int_linha
         and destino.str_linha = origem.str_linha
@@ -77,7 +79,7 @@ else:
       "data_carga": "origem.data_carga"
     })\
     .whenNotMatchedInsert(values = {
-      "data_carga": "origem.data_carga",
+      "chave": "origem.chave",
       "int_marca": "origem.int_marca",
       "str_marca": "origem.str_marca", 
       "int_linha": "origem.int_linha", 
@@ -92,81 +94,5 @@ else:
 
 # COMMAND ----------
 
-# DBTITLE 1,Tabela1
-df_tabela1 = df_bronze_base_vendas_dedup\
-  .groupBy("ano", "mes").agg(sum(col("int_qtd_venda")).alias("qtd"))
-
-df_tabela1\
-  .write\
-  .format("delta")\
-  .mode("overwrite")\
-  .option("overwriteSchema", "true")\
-  .save(silver_path_tabela1)
-
-# COMMAND ----------
-
-# DBTITLE 1,Tabela2
-df_tabela2 = df_bronze_base_vendas_dedup\
-  .groupBy("str_marca", "str_linha").agg(sum(col("int_qtd_venda")).alias("qtd"))
-
-df_tabela2\
-  .write\
-  .format("delta")\
-  .mode("overwrite")\
-  .option("overwriteSchema", "true")\
-  .save(silver_path_tabela2)
-
-# COMMAND ----------
-
-# DBTITLE 1,Tabela3
-df_tabela3 = df_bronze_base_vendas_dedup\
-  .groupBy("str_marca", "ano", "mes").agg(sum(col("int_qtd_venda")).alias("qtd"))
-
-df_tabela3\
-  .write\
-  .format("delta")\
-  .mode("overwrite")\
-  .option("overwriteSchema", "true")\
-  .save(silver_path_tabela3)
-
-# COMMAND ----------
-
-# DBTITLE 1,Tabela4
-df_tabela4 = df_bronze_base_vendas_dedup\
-  .groupBy("str_linha", "ano", "mes").agg(sum(col("int_qtd_venda")).alias("qtd"))
-
-df_tabela4\
-  .write\
-  .format("delta")\
-  .mode("overwrite")\
-  .option("overwriteSchema", "true")\
-  .save(silver_path_tabela4)
-
-# COMMAND ----------
-
-# DBTITLE 1,Tabela Marca Linha
-df_marca_linha = df_bronze_base_vendas_dedup\
-  .withColumn("chave", concat(col("str_marca"), lit(" - "), col("str_linha")))\
-  .select("chave", "int_marca", "str_marca", "int_linha", "str_linha").distinct()
-
-df_marca_linha\
-  .write\
-  .format("delta")\
-  .mode("overwrite")\
-  .option("overwriteSchema", "true")\
-  .save(silver_path_marca_linha)
-
-# COMMAND ----------
-
 # DBTITLE 1,Tabela Vendas
-df_vendas = df_bronze_base_vendas_dedup\
-  .withColumn("chave", concat(col("str_marca"), lit(" - "), col("str_linha")))\
-  .select("chave", "int_marca", "str_marca", "int_linha", "str_linha", "ano", "mes", "dt_venda", "int_qtd_venda", "arquivo_origem", "data_carga")\
-  .distinct()
 
-df_vendas\
-  .write\
-  .format("delta")\
-  .mode("overwrite")\
-  .option("overwriteSchema", "true")\
-  .save(silver_path_vendas)
