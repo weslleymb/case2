@@ -34,6 +34,68 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "chave",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "chave",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "int_marca",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "int_marca",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "str_marca",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "str_marca",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "int_linha",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "int_linha",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "str_linha",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "str_linha",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -46,7 +108,7 @@
 						"referenceName": "dsdlsparquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsdlsparquet_diretorio": "silver",
+							"dsdlsparquet_diretorio": "goldcase2",
 							"dsdlsparquet_arquivo": "marca_linha"
 						}
 					}
@@ -93,6 +155,128 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "chave",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "chave",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "int_marca",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "int_marca",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "str_marca",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "str_marca",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "int_linha",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "int_linha",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "str_linha",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "str_linha",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ano",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "ano",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "mes",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "mes",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "dt_venda",
+									"type": "DateTime",
+									"physicalType": "DATE"
+								},
+								"sink": {
+									"name": "dt_venda",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							},
+							{
+								"source": {
+									"name": "int_qtd_venda",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "int_qtd_venda",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "data_carga",
+									"type": "DateTime",
+									"physicalType": "INT96"
+								},
+								"sink": {
+									"name": "data_carga",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -105,7 +289,7 @@
 						"referenceName": "dsdlsparquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsdlsparquet_diretorio": "silver",
+							"dsdlsparquet_diretorio": "goldcase2",
 							"dsdlsparquet_arquivo": "vendas"
 						}
 					}
@@ -152,6 +336,44 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ano",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "ano",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "mes",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "mes",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "qtd",
+									"type": "Int64",
+									"physicalType": "INT64"
+								},
+								"sink": {
+									"name": "qtd",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -164,7 +386,7 @@
 						"referenceName": "dsdlsparquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsdlsparquet_diretorio": "silver",
+							"dsdlsparquet_diretorio": "goldcase2",
 							"dsdlsparquet_arquivo": "tabela1_ano_mes"
 						}
 					}
@@ -211,6 +433,44 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "str_marca",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "str_marca",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "str_linha",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "str_linha",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "qtd",
+									"type": "Int64",
+									"physicalType": "INT64"
+								},
+								"sink": {
+									"name": "qtd",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -223,7 +483,7 @@
 						"referenceName": "dsdlsparquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsdlsparquet_diretorio": "silver",
+							"dsdlsparquet_diretorio": "goldcase2",
 							"dsdlsparquet_arquivo": "tabela2_marca_linha"
 						}
 					}
@@ -270,6 +530,56 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "str_linha",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "str_linha",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ano",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "ano",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "mes",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "mes",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "qtd",
+									"type": "Int64",
+									"physicalType": "INT64"
+								},
+								"sink": {
+									"name": "qtd",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -282,7 +592,7 @@
 						"referenceName": "dsdlsparquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsdlsparquet_diretorio": "silver",
+							"dsdlsparquet_diretorio": "goldcase2",
 							"dsdlsparquet_arquivo": "tabela4_linha_ano_mes"
 						}
 					}
@@ -329,6 +639,56 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "str_marca",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "str_marca",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ano",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "ano",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "mes",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
+								"sink": {
+									"name": "mes",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "qtd",
+									"type": "Int64",
+									"physicalType": "INT64"
+								},
+								"sink": {
+									"name": "qtd",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -341,7 +701,7 @@
 						"referenceName": "dsdlsparquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsdlsparquet_diretorio": "silver",
+							"dsdlsparquet_diretorio": "goldcase2",
 							"dsdlsparquet_arquivo": "tabela3_marca_ano_mes"
 						}
 					}
@@ -388,6 +748,92 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "chave",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "chave",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "id",
+									"type": "Int64",
+									"physicalType": "INT64"
+								},
+								"sink": {
+									"name": "id",
+									"type": "Int64",
+									"physicalType": "bigint"
+								}
+							},
+							{
+								"source": {
+									"name": "usuario",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "usuario",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "msg",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "msg",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "sentiment",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "sentiment",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "dt_tweet",
+									"type": "DateTime",
+									"physicalType": "DATE"
+								},
+								"sink": {
+									"name": "dt_tweet",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							},
+							{
+								"source": {
+									"name": "data_carga",
+									"type": "DateTime",
+									"physicalType": "INT96"
+								},
+								"sink": {
+									"name": "data_carga",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -400,7 +846,7 @@
 						"referenceName": "dsdlsparquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsdlsparquet_diretorio": "silver",
+							"dsdlsparquet_diretorio": "goldcase2",
 							"dsdlsparquet_arquivo": "tweets"
 						}
 					}
