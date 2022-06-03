@@ -921,7 +921,14 @@
 					{
 						"name": "Listar arquivos",
 						"type": "GetMetadata",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "setup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -1075,6 +1082,26 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "setup",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Repos/case2/case2/databricks/setup"
+						},
+						"linkedServiceName": {
+							"referenceName": "lsdbw",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
@@ -1101,8 +1128,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/dsfsexcel')]",
-				"[concat(variables('factoryId'), '/datasets/dsdls')]",
-				"[concat(variables('factoryId'), '/linkedServices/lsdbw')]"
+				"[concat(variables('factoryId'), '/linkedServices/lsdbw')]",
+				"[concat(variables('factoryId'), '/datasets/dsdls')]"
 			]
 		},
 		{
