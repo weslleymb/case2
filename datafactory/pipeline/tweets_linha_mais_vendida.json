@@ -53,7 +53,7 @@
 					"notebookPath": "/Repos/case2/case2/databricks/tweets_linhas_mais_vendidas",
 					"baseParameters": {
 						"input": {
-							"value": "@activity('Lookup1').output.value",
+							"value": "@activity('Lookup1').output.value.str_linha",
 							"type": "Expression"
 						}
 					}
