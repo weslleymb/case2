@@ -54,10 +54,15 @@ df_process_tweets = spark.createDataFrame(pd_process_tweets)
 
 # COMMAND ----------
 
-# DBTITLE 1,Armazenamento
-df_process_tweets\
+# DBTITLE 1,Tratamento
+df_process_tweets_tratado = df_process_tweets\
   .withColumn("msg", regexp_replace(col("mensagem"), "[\n\r]", " "))\
-  .select("id", "usuario", "msg", col("data").cast("date").alias("dt_tweet"), col("linha").alias("str_linha"))\
+  .select("id", "usuario", "msg", col("data").cast("date").alias("dt_tweet"), col("linha").alias("str_linha"))
+
+# COMMAND ----------
+
+# DBTITLE 1,Armazenamento
+df_process_tweets_tratado\
   .write\
   .format("delta")\
   .mode("overwrite")\
