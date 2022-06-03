@@ -1647,7 +1647,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup1",
+						"name": "Consulta",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -1679,7 +1679,7 @@
 						"type": "DatabricksNotebook",
 						"dependsOn": [
 							{
-								"activity": "Lookup1",
+								"activity": "Consulta",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1697,7 +1697,7 @@
 							"notebookPath": "/Repos/case2/case2/databricks/tweets_linhas_mais_vendidas",
 							"baseParameters": {
 								"input": {
-									"value": "@activity('Lookup1').output.value",
+									"value": "@{activity('Consulta').output.firstRow.str_linha}",
 									"type": "Expression"
 								}
 							}
@@ -1718,6 +1718,84 @@
 								]
 							}
 						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.parquet",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "EXEC dbo.pr_cria_tabelas @dssqldb_tabela = 'tweets_linhas_mais_vendidas'",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false,
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dsdlsparquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"dsdlsparquet_diretorio": "goldcase2",
+									"dsdlsparquet_arquivo": "tweets_linhas_mais_vendidas"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dssqldb",
+								"type": "DatasetReference",
+								"parameters": {
+									"dssqldb_tabela": "tweets_linhas_mais_vendidas"
+								}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/dssqldb')]",
+				"[concat(variables('factoryId'), '/linkedServices/lsdbw')]",
+				"[concat(variables('factoryId'), '/datasets/dsdlsparquet')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Carga Tweets linha mais vendida",
+						"type": "Copy",
+						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -1781,9 +1859,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/dssqldb')]",
-				"[concat(variables('factoryId'), '/linkedServices/lsdbw')]",
-				"[concat(variables('factoryId'), '/datasets/dsdlsparquet')]"
+				"[concat(variables('factoryId'), '/datasets/dsdlsparquet')]",
+				"[concat(variables('factoryId'), '/datasets/dssqldb')]"
 			]
 		},
 		{
