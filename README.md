@@ -6,6 +6,7 @@ Proposta arquitetura
 
 
 Visualização
-![image](https://user-images.githubusercontent.com/77310545/171714285-fe37e8cd-75ed-4d25-ac37-46da05610d25.png)
+![image](https://user-images.githubusercontent.com/77310545/171855130-0bc69e81-6721-4254-9e7d-b2a4dd26d070.png)
+
 
 
