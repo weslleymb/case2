@@ -54,6 +54,26 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "tweets_linha_mais_vendida",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "curated",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "tweets_linha_mais_vendida",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": false
+				}
 			}
 		],
 		"annotations": []
